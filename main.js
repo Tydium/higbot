@@ -1,8 +1,14 @@
-const Discord = require('discord.js');
-const client = new Discord.Client();
+const { Client, Intents} = require('discord.js');
+const client = new Client({ 
+	intents: [
+		Intents.FLAGS.GUILDS, 
+		Intents.FLAGS.GUILD_MEMBERS,
+		Intents.FLAGS.GUILD_MESSAGES,
+	] 
+});
 const {inspect} = require('util')
 const fs = require('fs')
-
+const { token, botOwner } = require('./config.json')
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);
     client.user.setPresence({
@@ -85,16 +91,16 @@ function scheduleMsg(msg,resp,time){
     var os = new Date
     var bef = tros[resp.author.id]
     console.log(bef)
-    resp.channel.startTyping((time && time*1000) || 5000)
+    resp.channel.sendTyping()
     setTimeout(function(){
         console.log(bef,tros[resp.author.id])
         if (!tros[resp.author.id] || (tros[resp.author.id] === bef)) {
             resp.channel.send(msg)
         }
-        resp.channel.stopTyping(true)
+        resp.channel.sendTyping(false)
     },(time && time*1000) || 5000)
 }
-client.on('message', async msg => {
+client.on('messageCreate', async msg => {
     var os = new Date
     if (msg.author.id === client.user.id) {return}
     tros[msg.author.id] = os.getTime()
@@ -129,9 +135,9 @@ client.on('message', async msg => {
             tr = true
         }
     })
-    if (msg.content.startsWith('eval') && msg.author.id === '330356207833579520'){
+    if (msg.content.startsWith('eval') && msg.author.id === botOwner){
         eval(msg.content.substr(5))
     }
 });
 
-client.login('');
+client.login(token);
