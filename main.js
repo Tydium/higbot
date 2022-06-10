@@ -104,14 +104,14 @@ client.on('messageCreate', async msg => {
     var os = new Date
     if (msg.author.id === client.user.id) {return}
     tros[msg.author.id] = os.getTime()
-    if (!msg.guild && (msg.author.id != client.user.id)) {
+    /*if (!msg.guild && (msg.author.id != client.user.id)) { Commented out because I don't plan on using the DM feature.
         var str = `Message: \`${msg.content}\`, User: <@!${msg.author.id}> (name: ${msg.author.username}), Channel: <#${msg.channel.id}> (name: ${msg.channel.name})`
         console.log(str)
-        client.users.fetch('330356207833579520').then((user) => {
+        client.users.fetch('(Make this a config option later)').then((user) => {
             user.send(str)
 //            user.dmChannel.startTyping(9999999)
         })
-    }
+    }*/
     console.log('"'+msg.content+'"')
     if (mentionMessages[msg.content]){
         scheduleMsg(mentioned[random(0,mentioned.length)],msg)
